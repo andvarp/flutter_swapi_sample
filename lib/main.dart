@@ -11,8 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SWAPI Demo',
-      theme: ThemeData(primarySwatch: Colors.amber),
+      darkTheme: ThemeData.dark(),
       initialRoute: initialRoute,
       onGenerateRoute: Router.generateRoute,
     );
