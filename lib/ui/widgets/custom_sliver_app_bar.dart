@@ -11,13 +11,17 @@ class CustomSliverAppBar extends StatefulWidget {
 class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height * .20;
     return SliverAppBar(
       backgroundColor: Colors.black,
       floating: false,
       pinned: true,
-      expandedHeight: height * 0.30,
+      expandedHeight: height,
       flexibleSpace: FlexibleSpaceBar(
+        background: Image.network(
+          'https://i.ytimg.com/vi/sEl8ldmTO4o/maxresdefault.jpg',
+          fit: BoxFit.cover,
+        ),
         centerTitle: true,
         title: Text(
           widget.title,

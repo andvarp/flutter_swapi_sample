@@ -13,12 +13,13 @@ class _CustomSliverGridState extends State<CustomSliverGrid> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(2),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
           crossAxisCount: 2,
+          childAspectRatio: 0.7,
         ),
         delegate: widget.childBuilderDelegate,
       ),
