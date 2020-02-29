@@ -1,12 +1,13 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_swapi_sample/core/enums/view_state.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
+import 'package:flutter_swapi_sample/core/viewmodels/home_model.dart';
 import 'package:flutter_swapi_sample/ui/shared/loading.dart';
 import 'package:flutter_swapi_sample/ui/widgets/card_image.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_swapi_sample/core/viewmodels/home_model.dart';
-import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_grid.dart';
 
@@ -41,7 +42,7 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  Widget renderContent(context) {
+  Widget renderContent() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: CustomScrollView(
@@ -97,11 +98,9 @@ class _HomeViewState extends State<HomeView> {
         }
         return Scaffold(
           backgroundColor: Colors.black,
-          body: Builder(
-            builder: (ctx) => _showGrid
-                ? renderContent(ctx)
-                : Loading(showLoading: _model.state == ViewState.Busy),
-          ),
+          body: _showGrid
+              ? renderContent()
+              : Loading(showLoading: _model.state == ViewState.Busy),
         );
       }),
     );
