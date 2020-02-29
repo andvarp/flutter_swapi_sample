@@ -1,3 +1,5 @@
+import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
+
 class ApiCategories {
   Map<String, dynamic> categoriesMap = {};
 
@@ -14,4 +16,8 @@ class ApiCategories {
   bool get hasData {
     return (categoriesMap?.length ?? 0) > 0;
   }
+
+  ApiCategoriesEnum apiCategoryToEnum(String category) =>
+      ApiCategoriesEnum.values
+          .firstWhere((e) => e.toString() == 'ApiCategoriesEnum.$category');
 }
