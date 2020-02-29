@@ -77,6 +77,7 @@ class _HomeViewState extends State<HomeView> {
               _model.apiCategories.apiCategoryToEnum(category);
           String imageUrl = categoryImages[apiCategoryEnum];
           return CardImage(
+            tag: apiCategoryEnum.toString(),
             imageUrl: imageUrl,
             label: category,
             onTap: () {
