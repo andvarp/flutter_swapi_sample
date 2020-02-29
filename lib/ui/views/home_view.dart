@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
+import 'package:flutter_swapi_sample/ui/shared/loading.dart';
 import 'package:flutter_swapi_sample/ui/widgets/card_image.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_swapi_sample/core/viewmodels/home_model.dart';
@@ -38,18 +39,6 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _showGrid = result;
     });
-  }
-
-  Widget renderLoading() {
-    if (_model.state == ViewState.Idle) return null;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(),
-        ],
-      ),
-    );
   }
 
   Widget renderContent(context) {
@@ -109,7 +98,9 @@ class _HomeViewState extends State<HomeView> {
         return Scaffold(
           backgroundColor: Colors.black,
           body: Builder(
-            builder: (ctx) => _showGrid ? renderContent(ctx) : renderLoading(),
+            builder: (ctx) => _showGrid
+                ? renderContent(ctx)
+                : Loading(showLoading: _model.state == ViewState.Busy),
           ),
         );
       }),
