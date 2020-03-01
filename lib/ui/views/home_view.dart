@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_swapi_sample/core/enums/routes.dart';
+import 'package:flutter_swapi_sample/core/models/api_categories.dart';
+import 'package:flutter_swapi_sample/core/selectors/api_categories.dart';
 import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
 import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
@@ -8,6 +12,10 @@ import 'package:flutter_swapi_sample/ui/shared/loading.dart';
 import 'package:flutter_swapi_sample/ui/widgets/card_image.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_grid.dart';
+import 'package:flutter_swapi_sample/utils/utils.dart';
+
+final String title = 'Flutter\nSWAPI';
+final String noDataFound = 'No data has found!';
 
 class HomeView extends StatefulWidget {
   @override
@@ -16,21 +24,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   AppModel _model = locator<AppModel>();
-
-  Map<ApiCategoriesEnum, String> categoryImages = {
-    ApiCategoriesEnum.people:
-        'https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Wicket_W_Warrick.png/220px-Wicket_W_Warrick.png',
-    ApiCategoriesEnum.planets:
-        'https://c4.wallpaperflare.com/wallpaper/170/165/99/space-planet-amoled-dark-vertical-hd-wallpaper-preview.jpg',
-    ApiCategoriesEnum.films:
-        'https://miro.medium.com/max/960/0*mFrLRixn7__X1tLH.jpg',
-    ApiCategoriesEnum.species:
-        'https://lumiere-a.akamaihd.net/v1/images/Jabba-The-Hutt_b5a08a70.jpeg',
-    ApiCategoriesEnum.vehicles:
-        'https://cdn.collider.com/wp-content/uploads/2017/08/star-wars-8-at-m6.jpg',
-    ApiCategoriesEnum.starships:
-        'https://img1.cgtrader.com/items/251200/cf0f0dc08c/millenium-falcon-space-ship-star-wars-3d-model-max-obj-3ds-fbx-c4d-lwo-lw-lws.jpg',
-  };
+  ApiCategories _apiCategories;
+  List<String> _categories;
 
   Widget buildView() {
     Widget child = Container();
@@ -52,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
       child: CustomScrollView(
         slivers: <Widget>[
           CustomSliverAppBar(
-            title: 'Flutter\nSWAPI',
+            title: title,
           ),
           buildGrid(),
         ],
@@ -61,25 +56,24 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget buildNoDataContent() {
-    return Container(child: Text('No data has found!'));
+    return Container(child: Text(noDataFound));
   }
 
   Widget buildGrid() {
-    List<String> categories = _model.apiCategories.categoriesMap.keys.toList();
+    List<String> categories = _categories;
 
     return CustomSliverGrid(
       childBuilderDelegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           String category = categories[index];
           ApiCategoriesEnum apiCategoryEnum =
-              _model.apiCategories.apiCategoryToEnum(category);
-          String imageUrl = categoryImages[apiCategoryEnum];
+              _apiCategories.apiCategoryToEnum(category);
           return CardImage(
             tag: apiCategoryEnum.toString(),
-            imageUrl: imageUrl,
+            imageUrl: categoryImagesMap[apiCategoryEnum],
             label: category,
             onTap: () {
-              Navigator.pushNamed(context, 'people');
+              Navigator.pushNamed(context, describeEnum(Routes.people));
               Scaffold.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Tap $category'),
@@ -96,9 +90,16 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    getSelectorValues();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: buildView(),
     );
+  }
+
+  void getSelectorValues() {
+    _apiCategories = apiCategoriesSelector(_model);
+    _categories = apiCategoriesListSelector(_model);
   }
 }

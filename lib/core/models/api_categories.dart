@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
 
 class ApiCategories {
@@ -19,5 +20,5 @@ class ApiCategories {
 
   ApiCategoriesEnum apiCategoryToEnum(String category) =>
       ApiCategoriesEnum.values
-          .firstWhere((e) => e.toString() == 'ApiCategoriesEnum.$category');
+          .firstWhere((e) => describeEnum(e).toString() == category);
 }
