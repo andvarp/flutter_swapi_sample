@@ -8,8 +8,8 @@ class SwapiService {
   ApiCategories _apiCategories;
   ApiCategories get apiCategories => _apiCategories;
 
-  Future<bool> getData() async {
+  Future<ApiCategories> getApiCategories() async {
     _apiCategories = await _swapi.getApiCategory();
-    return _apiCategories.hasData;
+    return _apiCategories;
   }
 }

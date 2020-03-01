@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!showLoading) return null;
+    if (!showLoading) return Container();
 
     return Center(
       child: Column(

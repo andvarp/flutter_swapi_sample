@@ -1,11 +1,9 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_swapi_sample/core/enums/view_state.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
 import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
-import 'package:flutter_swapi_sample/core/viewmodels/home_model.dart';
+import 'package:flutter_swapi_sample/core/enums/view_state.dart';
 import 'package:flutter_swapi_sample/ui/shared/loading.dart';
 import 'package:flutter_swapi_sample/ui/widgets/card_image.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';
@@ -17,10 +15,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  bool _showGrid = false;
-  HomeModel _model;
+  AppModel _model = locator<AppModel>();
 
-  Map categoryImages = {
+  Map<ApiCategoriesEnum, String> categoryImages = {
     ApiCategoriesEnum.people:
         'https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Wicket_W_Warrick.png/220px-Wicket_W_Warrick.png',
     ApiCategoriesEnum.planets:
@@ -35,14 +32,21 @@ class _HomeViewState extends State<HomeView> {
         'https://img1.cgtrader.com/items/251200/cf0f0dc08c/millenium-falcon-space-ship-star-wars-3d-model-max-obj-3ds-fbx-c4d-lwo-lw-lws.jpg',
   };
 
-  void loadData(model) async {
-    bool result = await model.getData();
-    setState(() {
-      _showGrid = result;
-    });
+  Widget buildView() {
+    Widget child = Container();
+
+    if (_model.state == ViewState.Busy) {
+      child = Loading(showLoading: true);
+    } else if (_model?.apiCategories?.hasData ?? false) {
+      child = buildContent();
+    } else {
+      child = buildNoDataContent();
+    }
+
+    return child;
   }
 
-  Widget renderContent() {
+  Widget buildContent() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: CustomScrollView(
@@ -50,13 +54,17 @@ class _HomeViewState extends State<HomeView> {
           CustomSliverAppBar(
             title: 'Flutter\nSWAPI',
           ),
-          renderGrid(),
+          buildGrid(),
         ],
       ),
     );
   }
 
-  Widget renderGrid() {
+  Widget buildNoDataContent() {
+    return Container(child: Text('No data has found!'));
+  }
+
+  Widget buildGrid() {
     List<String> categories = _model.apiCategories.categoriesMap.keys.toList();
 
     return CustomSliverGrid(
@@ -71,6 +79,7 @@ class _HomeViewState extends State<HomeView> {
             imageUrl: imageUrl,
             label: category,
             onTap: () {
+              Navigator.pushNamed(context, 'people');
               Scaffold.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Tap $category'),
@@ -87,22 +96,9 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => locator<HomeModel>(),
-      child: Consumer<HomeModel>(builder: (context, model, child) {
-        _model = model;
-
-        // Trigger Initial Data Loading
-        if (_model.state == ViewState.Idle && !_showGrid) {
-          loadData(_model);
-        }
-        return Scaffold(
-          backgroundColor: Colors.black,
-          body: _showGrid
-              ? renderContent()
-              : Loading(showLoading: _model.state == ViewState.Busy),
-        );
-      }),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: buildView(),
     );
   }
 }
