@@ -1,5 +1,4 @@
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
-import 'package:flutter_swapi_sample/core/enums/routes.dart';
 
 final Map<ApiCategoriesEnum, String> categoryImagesMap = {
   ApiCategoriesEnum.people:
