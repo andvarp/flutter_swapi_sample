@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swapi_sample/core/selectors/people.dart';
+import 'package:flutter_swapi_sample/core/selectors/people_selectors.dart';
 import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
 import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';

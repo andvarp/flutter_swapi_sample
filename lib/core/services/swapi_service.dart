@@ -36,9 +36,9 @@ class SwapiService extends Swapi {
 
   void log(dynamic log) {
     // TODO: remove this
-    print('***********************');
+    print('**********SwapiService*************');
     print(log);
-    print('***********************');
+    print('***********************************');
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swapi_sample/core/enums/routes.dart';
 import 'package:flutter_swapi_sample/core/models/api_categories.dart';
-import 'package:flutter_swapi_sample/core/selectors/api_categories.dart';
-import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
+import 'package:flutter_swapi_sample/core/selectors/home_selectors.dart';
+import 'package:flutter_swapi_sample/core/viewmodels/view_models.dart';
 import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
 import 'package:flutter_swapi_sample/core/enums/view_state.dart';
@@ -24,15 +24,16 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   AppModel _model = locator<AppModel>();
+  ViewState _state;
   ApiCategories _apiCategories;
   List<String> _categories;
 
   Widget buildView() {
     Widget child = Container();
 
-    if (_model.state == ViewState.Busy) {
+    if (_state == ViewState.Busy) {
       child = Loading(showLoading: true);
-    } else if (_model?.apiCategories?.hasData ?? false) {
+    } else if (_apiCategories?.hasData ?? false) {
       child = buildContent();
     } else {
       child = buildNoDataContent();
@@ -99,6 +100,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void getSelectorValues() {
+    _state = homeModelStateSelector(_model);
     _apiCategories = apiCategoriesSelector(_model);
     _categories = apiCategoriesListSelector(_model);
   }
