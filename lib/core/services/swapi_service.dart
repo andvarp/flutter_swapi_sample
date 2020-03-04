@@ -42,8 +42,12 @@ class SwapiService extends Swapi {
   }
 
   @override
-  Future<StarWarsCollection<StarWarsPerson>> getPeople() async {
-    StarWarsCollection<StarWarsPerson> people = await _swapi.people();
+  Future<StarWarsCollection<StarWarsPerson>> getPeople({
+    int page = 1,
+    String searchTerm,
+  }) async {
+    StarWarsCollection<StarWarsPerson> people =
+        await _swapi.people(page: page, searchTerm: searchTerm);
     log(people);
     return people;
   }

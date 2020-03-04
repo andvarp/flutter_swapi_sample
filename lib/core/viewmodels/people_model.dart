@@ -11,7 +11,18 @@ class PeopleModel extends BaseViewModel {
     bool success = _people.results.length > 0;
 
     if (success) {
-      people = _people;
+      if ((people?.results?.length ?? 0) > 0) {
+        List<StarWarsPerson> newResults =
+            List<StarWarsPerson>.from(people.results)..addAll(_people.results);
+        people = StarWarsCollection<StarWarsPerson>(
+          count: _people.count,
+          next: _people.next,
+          previous: _people.previous,
+          results: newResults,
+        );
+      } else {
+        people = _people;
+      }
     } else {
       error = 'Something happend. No data';
     }

@@ -13,6 +13,11 @@ class AppModel extends ChangeNotifier {
   AppModel() {
     getApiCategories();
     getPeople();
+//    getFilms();
+//    getPlanets();
+//    getSpecies();
+//    getStarships();
+//    getVehicles();
   }
 
   HomeModel get homeModel => _homeModel;
@@ -23,7 +28,12 @@ class AppModel extends ChangeNotifier {
         _swapiService.getApiCategories(), notifyListeners);
   }
 
-  void getPeople() {
-    _peopleModel.getPeople(_swapiService.getPeople(), notifyListeners);
+  void getPeople({
+    int page = 1,
+    String searchTerm,
+  }) {
+    _peopleModel.getPeople(
+        _swapiService.getPeople(page: page, searchTerm: searchTerm),
+        notifyListeners);
   }
 }
