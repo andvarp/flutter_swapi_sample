@@ -4,7 +4,10 @@ import 'package:flutter/widgets.dart';
 class CustomSliverAppBar extends StatefulWidget {
   final String title;
   final showProgressIndicator;
-  CustomSliverAppBar({this.title, this.showProgressIndicator});
+  final Widget headerImage;
+  CustomSliverAppBar({this.title, this.showProgressIndicator, this.headerImage})
+      : assert(headerImage != null),
+        assert(title != null);
   @override
   _CustomSliverAppBarState createState() => _CustomSliverAppBarState();
 }
@@ -24,10 +27,7 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
         child: progressBarBuilder(),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(
-          'https://i.ytimg.com/vi/sEl8ldmTO4o/maxresdefault.jpg',
-          fit: BoxFit.cover,
-        ),
+        background: widget.headerImage,
         centerTitle: true,
         title: Text(
           widget.title,
@@ -49,7 +49,8 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
           ? LinearProgressIndicator(
               backgroundColor: Colors.red[300],
               valueColor: new AlwaysStoppedAnimation<Color>(
-                  Colors.red), //todo: onScroll mark progress
+                Colors.red,
+              ), //todo: onScroll mark progress
             )
           : Container(
               height: 6.0,

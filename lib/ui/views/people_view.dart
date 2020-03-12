@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
 import 'package:flutter_swapi_sample/core/enums/view_state.dart';
 import 'package:flutter_swapi_sample/core/selectors/people_selectors.dart';
 import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
 import 'package:flutter_swapi_sample/locator.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';
+import 'package:flutter_swapi_sample/utils/utils.dart';
 import 'package:swapi_client/swapi_client.dart';
 
 final String title = 'People';
@@ -15,7 +17,9 @@ class PeopleView extends StatefulWidget {
 }
 
 class _PeopleViewState extends State<PeopleView> {
-  AppModel _model = locator<AppModel>();
+  final AppModel _model = locator<AppModel>();
+  final ApiCategoriesEnum _categoryEnum = ApiCategoriesEnum.people;
+
   ViewState _state;
   StarWarsCollection<StarWarsPerson> _people;
   ScrollController _controller = ScrollController();
@@ -27,6 +31,7 @@ class _PeopleViewState extends State<PeopleView> {
     super.initState();
     _controller.addListener(() {
       double triggerHeight = _controller.position.maxScrollExtent * .5;
+      // todo: fix trigger height, add a
 
       if (_controller.offset >= triggerHeight &&
           _state == ViewState.Idle &&
@@ -40,6 +45,8 @@ class _PeopleViewState extends State<PeopleView> {
   }
 
   Widget buildContent() {
+    // TODO: render different components depending on the state and data
+
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: CustomScrollView(
@@ -48,16 +55,24 @@ class _PeopleViewState extends State<PeopleView> {
           CustomSliverAppBar(
             title: title,
             showProgressIndicator: _state == ViewState.Busy,
-//            showProgressIndicator: true,
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return listItem(_people.results[index].name);
-              },
-              childCount: _people.results.length,
+            headerImage: Hero(
+              tag: _categoryEnum.toString(),
+              child: Image.network(
+                categoryImagesMap[_categoryEnum],
+                fit: BoxFit.cover,
+              ),
             ),
-          )
+          ),
+          _people?.results != null
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return listItem(_people.results[index]?.name);
+                    },
+                    childCount: _people.results.length,
+                  ),
+                )
+              : SliverFillRemaining()
         ],
       ),
     );
@@ -79,6 +94,7 @@ class _PeopleViewState extends State<PeopleView> {
     _people = peopleSelector(_model);
   }
 
+  // todo: refactor this to it's own widget
   Widget listItem(String title) => Container(
         height: 100.0,
         child: Center(

@@ -9,6 +9,19 @@ void main() {
   runApp(MyApp());
 }
 
+ThemeData myTheme() {
+  return ThemeData.dark().copyWith(
+    primaryColor: Colors.amber,
+    accentColor: Colors.red,
+    scaffoldBackgroundColor: Colors.black,
+    textTheme: TextTheme(
+      body1: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +29,7 @@ class MyApp extends StatelessWidget {
       builder: (context) => locator<AppModel>(),
       child: Consumer<AppModel>(
         builder: (context, model, child) => MaterialApp(
-          darkTheme: ThemeData.dark(),
+          theme: myTheme(),
           initialRoute: initialRoute,
           onGenerateRoute: Router.generateRoute,
         ),

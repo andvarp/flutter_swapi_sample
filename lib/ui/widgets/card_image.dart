@@ -16,15 +16,15 @@ class CardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      semanticContainer: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Hero(
-            tag: label,
-            child: Ink.image(
+    return Hero(
+      tag: tag,
+      child: Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Ink.image(
               image: NetworkImage(imageUrl),
               fit: BoxFit.fill,
               child: InkWell(
@@ -36,10 +36,7 @@ class CardImage extends StatelessWidget {
                         child: Text(
                           '${label[0].toUpperCase()}${label.substring(1)}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
-                          ),
+                          style: Theme.of(context).textTheme.headline,
                         ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -67,15 +64,15 @@ class CardImage extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
-        alignment: AlignmentDirectional.bottomCenter,
+            )
+          ],
+          alignment: AlignmentDirectional.bottomCenter,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 5,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 5,
     );
   }
 }

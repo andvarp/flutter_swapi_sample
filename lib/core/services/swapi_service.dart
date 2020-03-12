@@ -1,5 +1,6 @@
 import 'package:flutter_swapi_sample/core/models/api_categories.dart';
 import 'package:flutter_swapi_sample/locator.dart';
+import 'package:flutter_swapi_sample/utils/logger.dart';
 import 'package:swapi_client/swapi_client.dart';
 
 abstract class Swapi {
@@ -34,13 +35,6 @@ class SwapiService extends Swapi {
     return apiCategories;
   }
 
-  void log(dynamic log) {
-    // TODO: remove this
-    print('**********SwapiService*************');
-    print(log);
-    print('***********************************');
-  }
-
   @override
   Future<StarWarsCollection<StarWarsPerson>> getPeople({
     int page = 1,
@@ -48,21 +42,21 @@ class SwapiService extends Swapi {
   }) async {
     StarWarsCollection<StarWarsPerson> people =
         await _swapi.people(page: page, searchTerm: searchTerm);
-    log(people);
+    logger.i(people);
     return people;
   }
 
   @override
   Future<StarWarsCollection<StarWarsFilm>> getFilms() async {
     StarWarsCollection<StarWarsFilm> films = await _swapi.films();
-    log(films);
+    logger.i(films);
     return films;
   }
 
   @override
   Future<StarWarsCollection<StarWarsPlanet>> getPlanets() async {
     StarWarsCollection<StarWarsPlanet> planets = await _swapi.planets();
-    log(planets);
+    logger.i(planets);
     return planets;
   }
 
@@ -70,21 +64,21 @@ class SwapiService extends Swapi {
   Future<StarWarsCollection<StarWarsSpecies>> getSpecies() async {
     StarWarsCollection<StarWarsSpecies> species =
         await _swapi.speciesCollection();
-    log(species);
+    logger.i(species);
     return species;
   }
 
   @override
   Future<StarWarsCollection<StarWarsStarship>> getStarships() async {
     StarWarsCollection<StarWarsStarship> starship = await _swapi.starships();
-    log(starship);
+    logger.i(starship);
     return starship;
   }
 
   @override
   Future<StarWarsCollection<StarWarsVehicle>> getVehicles() async {
     StarWarsCollection<StarWarsVehicle> vehicles = await _swapi.vehicles();
-    log(vehicles);
+    logger.i(vehicles);
     return vehicles;
   }
 }

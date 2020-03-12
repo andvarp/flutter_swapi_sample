@@ -12,6 +12,7 @@ import 'package:flutter_swapi_sample/ui/shared/loading.dart';
 import 'package:flutter_swapi_sample/ui/widgets/card_image.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_app_bar.dart';
 import 'package:flutter_swapi_sample/ui/widgets/custom_sliver_grid.dart';
+import 'package:flutter_swapi_sample/utils/logger.dart';
 import 'package:flutter_swapi_sample/utils/utils.dart';
 
 final String title = 'Flutter\nSWAPI';
@@ -38,7 +39,6 @@ class _HomeViewState extends State<HomeView> {
     } else {
       child = buildNoDataContent();
     }
-
     return child;
   }
 
@@ -49,6 +49,10 @@ class _HomeViewState extends State<HomeView> {
         slivers: <Widget>[
           CustomSliverAppBar(
             title: title,
+            headerImage: Image.network(
+              'https://i.ytimg.com/vi/sEl8ldmTO4o/maxresdefault.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
           buildGrid(),
         ],
@@ -62,6 +66,10 @@ class _HomeViewState extends State<HomeView> {
 
   Widget buildGrid() {
     List<String> categories = _categories;
+
+    if ((categories?.length ?? 0) == 0) {
+      return SliverFillRemaining();
+    }
 
     return CustomSliverGrid(
       childBuilderDelegate: SliverChildBuilderDelegate(
@@ -95,7 +103,9 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: buildView(),
+      body: Builder(
+        builder: (ctx) => buildView(),
+      ),
     );
   }
 
@@ -103,5 +113,6 @@ class _HomeViewState extends State<HomeView> {
     _state = homeModelStateSelector(_model);
     _apiCategories = apiCategoriesSelector(_model);
     _categories = apiCategoriesListSelector(_model);
+    logger.d("In homeView --******");
   }
 }
