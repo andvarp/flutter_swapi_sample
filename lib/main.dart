@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
           theme: myTheme(),
           initialRoute: initialRoute,
           onGenerateRoute: Router.generateRoute,
+          onUnknownRoute: Router.generateUnknownRoute,
         ),
       ),
     );

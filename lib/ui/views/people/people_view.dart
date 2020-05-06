@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_swapi_sample/core/enums/api_categories.dart';
+import 'package:flutter_swapi_sample/core/enums/routes.dart';
 import 'package:flutter_swapi_sample/core/enums/view_state.dart';
 import 'package:flutter_swapi_sample/core/selectors/people_selectors.dart';
 import 'package:flutter_swapi_sample/core/viewmodels/app_model.dart';
@@ -67,7 +69,15 @@ class _PeopleViewState extends State<PeopleView> {
               ? SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      return listItem(_people.results[index]?.name);
+                      StarWarsPerson person = _people.results[index];
+                      return GestureDetector(
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          describeEnum(Routes.personDetail),
+                          arguments: person,
+                        ),
+                        child: listItem(title: person?.name),
+                      );
                     },
                     childCount: _people.results.length,
                   ),
@@ -82,7 +92,6 @@ class _PeopleViewState extends State<PeopleView> {
   Widget build(BuildContext context) {
     getSelectorValues();
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Builder(
         builder: (context) => buildContent(),
       ),
@@ -95,7 +104,7 @@ class _PeopleViewState extends State<PeopleView> {
   }
 
   // todo: refactor this to it's own widget
-  Widget listItem(String title) => Container(
+  Widget listItem({String title}) => Container(
         height: 100.0,
         child: Center(
           child: Text(

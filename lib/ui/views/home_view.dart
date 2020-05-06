@@ -102,7 +102,6 @@ class _HomeViewState extends State<HomeView> {
     getSelectorValues();
 
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Builder(
         builder: (ctx) => buildView(),
       ),
